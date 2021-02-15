@@ -1,0 +1,11 @@
+[package]
+name = "classnames"
+description = "Library for generating BEM style classnames"
+version = "1.0.0"
+authors = ["josephlenton@gmail.com <josephlenton@gmail.com>"]
+edition = "2018"
+license = "MIT"
+repository = "https://github.com/JosephLenton/classnames"
+
+[dependencies]
+smallvec = "1.6.1"
