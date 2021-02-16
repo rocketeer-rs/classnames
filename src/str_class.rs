@@ -1,7 +1,7 @@
+use ::std::borrow::Cow;
+use ::std::convert::From;
 use ::std::fmt;
 use ::std::ops::Add;
-use ::std::convert::From;
-use ::std::borrow::Cow;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct StrClass<L> {

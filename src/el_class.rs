@@ -1,8 +1,8 @@
 use crate::{AttrClass, StrClass};
+use ::std::borrow::Cow;
+use ::std::convert::From;
 use ::std::fmt;
 use ::std::ops::Add;
-use ::std::convert::From;
-use ::std::borrow::Cow;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct ElClass<N> {
@@ -19,7 +19,11 @@ impl<N: Sized + fmt::Display> ElClass<N> {
     }
 
     pub fn attr(self, attr: &'static str) -> AttrClass<Self> {
-        AttrClass::new(self, attr)
+        AttrClass::new(self).attr(attr)
+    }
+
+    pub fn maybe_attr(self, attr: &'static str, is_set: bool) -> AttrClass<Self> {
+        AttrClass::new(self).maybe_attr(attr, is_set)
     }
 }
 
@@ -49,5 +53,37 @@ impl<'a, N: fmt::Display> From<ElClass<N>> for Cow<'a, str> {
 impl<'a, N: fmt::Display> From<ElClass<N>> for String {
     fn from(class: ElClass<N>) -> Self {
         class.to_string()
+    }
+}
+
+#[cfg(test)]
+mod maybe_attr {
+    use crate::Class;
+
+    #[test]
+    fn is_should_set_attr_if_is_set() {
+        let el = Class::new("mr-component").el("child");
+        assert_eq!(
+            "mr-component__child mr-component__child--red",
+            el.maybe_attr("red", true).to_string()
+        )
+    }
+
+    #[test]
+    fn is_should_not_set_attr_if_is_set_is_false() {
+        let el = Class::new("mr-component").el("child");
+        assert_eq!(
+            "mr-component__child",
+            el.maybe_attr("red", false).to_string()
+        )
+    }
+
+    #[test]
+    fn is_should_still_set_more_attr_after_false_maybe_attr() {
+        let el = Class::new("mr-component").el("child");
+        assert_eq!(
+            "mr-component__child mr-component__child--blue",
+            el.maybe_attr("red", false).attr("blue").to_string()
+        )
     }
 }

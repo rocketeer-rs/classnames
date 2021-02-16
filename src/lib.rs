@@ -8,26 +8,26 @@ pub use crate::class::Class;
 pub use crate::el_class::ElClass;
 pub use crate::str_class::StrClass;
 
-/*
- * Internally this crate works by structuring nodes in reverse order.
- *
- * i.e. The following code ...
- *
- *   Node::new("home_page").append("content").append("button")
- *
- * Would produce a structure like this ...
- *
- *  {
- *      base_class: "button",
- *      parent: {
- *          base_class: "content",
- *          parent: {
- *              base_class: "home_page",
- *              parent: None,
- *          }
- *      }
- *  }
- */
+//
+// Internally this crate works by structuring nodes in reverse order.
+//
+// i.e. The following code ...
+//
+//   Node::new("home_page").append("content").append("button")
+//
+// Would produce a structure like this ...
+//
+//  {
+//      base_class: "button",
+//      parent: {
+//          base_class: "content",
+//          parent: {
+//              base_class: "home_page",
+//              parent: None,
+//          }
+//      }
+//  }
+//
 
 #[cfg(test)]
 mod tests {
