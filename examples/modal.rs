@@ -1,10 +1,10 @@
-use ::classnames::Class;
+use ::classnames::{classname, Class};
 use ::render::{component, rsx, Render};
 
 use ::xmltree::{Element, EmitterConfig};
 
 fn main() {
-    let base_class = Class::new("upgrade-modal");
+    let base_class = classname("upgrade-modal");
 
     let html = rsx! {
       <Modal class={base_class} title={"Upgrade your account"} is_important={true}>
@@ -19,17 +19,17 @@ fn main() {
 
 #[allow(unused_braces)]
 #[component]
-pub fn Modal<Children: Render>(
-    class: Class,
+pub fn Modal<C: Class, Children: Render>(
+    class: C,
     title: &'static str,
     is_important: bool,
     children: Children,
 ) -> impl Render {
-    let base_class = Class::new("modal");
+    let base_class = classname("modal");
 
     rsx! {
       <div
-        class={base_class.maybe_attr("important", is_important) + class.into()}
+        class={base_class.maybe_attr("important", is_important) + class}
       >
         <h2 class={base_class.el("title")}>{title}</h2>
 

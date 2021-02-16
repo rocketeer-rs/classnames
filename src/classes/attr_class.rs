@@ -1,4 +1,6 @@
-use crate::StrClass;
+use crate::Class;
+use crate::classes::DuoClass;
+use crate::classes::OptionClass;
 use ::smallvec::SmallVec;
 use ::std::borrow::Cow;
 use ::std::convert::From;
@@ -9,11 +11,16 @@ const ATTR_SMALL_VEC_SIZE: usize = 3;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct AttrClass<N> {
-    pub(crate) parent: N,
-    pub(crate) attrs: SmallVec<[&'static str; ATTR_SMALL_VEC_SIZE]>,
+    parent: N,
+    attrs: SmallVec<[&'static str; ATTR_SMALL_VEC_SIZE]>,
 }
 
-impl<N: Sized + fmt::Display> AttrClass<N> {
+impl<N> Class for AttrClass<N>
+where
+    N: fmt::Display + Sized + PartialEq + Clone
+{}
+
+impl<N: fmt::Display + Sized> AttrClass<N> {
     pub(crate) fn new(parent: N) -> Self {
         Self {
             parent,
@@ -40,14 +47,38 @@ impl<N: Sized + fmt::Display> AttrClass<N> {
     }
 }
 
-impl<N> Add<&'static str> for AttrClass<N> {
-    type Output = StrClass<Self>;
+impl<N, O> Add<O> for AttrClass<N>
+where
+    N: Class,
+    O: Class,
+{
+    type Output = DuoClass<Self, O>;
 
-    fn add(self, other: &'static str) -> Self::Output {
-        StrClass {
-            left: self,
-            right: other,
-        }
+    fn add(self, other: O) -> Self::Output {
+        DuoClass::new(self, other)
+    }
+}
+
+impl<'s, N> Add<&'s str> for AttrClass<N>
+where
+    N: Class,
+{
+    type Output = DuoClass<Self, &'s str>;
+
+    fn add(self, other: &'s str) -> Self::Output {
+        DuoClass::new(self, other)
+    }
+}
+
+impl<N, O> Add<Option<O>> for AttrClass<N>
+where
+    N: Class,
+    O: Class,
+{
+    type Output = DuoClass<Self, OptionClass<O>>;
+
+    fn add(self, other: Option<O>) -> Self::Output {
+        DuoClass::new(self, OptionClass::new(other))
     }
 }
 
@@ -77,11 +108,11 @@ impl<'a, N: fmt::Display> From<AttrClass<N>> for String {
 
 #[cfg(test)]
 mod maybe_attr {
-    use crate::Class;
+    use crate::*;
 
     #[test]
     fn is_should_set_attr_if_is_set() {
-        let attr = Class::new("mr-component").attr("large");
+        let attr = classname("mr-component").attr("large");
         assert_eq!(
             "mr-component mr-component--large mr-component--red",
             attr.maybe_attr("red", true).to_string()
@@ -90,7 +121,7 @@ mod maybe_attr {
 
     #[test]
     fn is_should_not_set_attr_if_is_set_is_false() {
-        let attr = Class::new("mr-component").attr("large");
+        let attr = classname("mr-component").attr("large");
         assert_eq!(
             "mr-component mr-component--large",
             attr.maybe_attr("red", false).to_string()
@@ -99,7 +130,7 @@ mod maybe_attr {
 
     #[test]
     fn is_should_still_set_more_attr_after_false_maybe_attr() {
-        let attr = Class::new("mr-component").attr("large");
+        let attr = classname("mr-component").attr("large");
         assert_eq!(
             "mr-component mr-component--large mr-component--blue",
             attr.maybe_attr("red", false).attr("blue").to_string()

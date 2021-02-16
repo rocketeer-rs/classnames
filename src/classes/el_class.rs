@@ -1,4 +1,5 @@
-use crate::{AttrClass, StrClass};
+use crate::Class;
+use crate::classes::{OptionClass, AttrClass, DuoClass};
 use ::std::borrow::Cow;
 use ::std::convert::From;
 use ::std::fmt;
@@ -6,11 +7,23 @@ use ::std::ops::Add;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct ElClass<N> {
-    pub(crate) parent: N,
-    pub(crate) class: &'static str,
+    parent: N,
+    class: &'static str,
 }
 
+impl<N> Class for ElClass<N>
+where
+    N: fmt::Display + Sized + PartialEq + Clone
+{}
+
 impl<N: Sized + fmt::Display> ElClass<N> {
+    pub(crate) fn new(parent: N, class: &'static str) -> Self {
+        Self {
+            parent,
+            class,
+        }
+    }
+
     pub fn el(self, class: &'static str) -> ElClass<Self> {
         ElClass {
             parent: self,
@@ -27,14 +40,38 @@ impl<N: Sized + fmt::Display> ElClass<N> {
     }
 }
 
-impl<N> Add<&'static str> for ElClass<N> {
-    type Output = StrClass<Self>;
+impl<N, O> Add<O> for ElClass<N>
+where
+    N: Class,
+    O: Class,
+{
+    type Output = DuoClass<Self, O>;
 
-    fn add(self, other: &'static str) -> Self::Output {
-        StrClass {
-            left: self,
-            right: other,
-        }
+    fn add(self, other: O) -> Self::Output {
+        DuoClass::new(self, other)
+    }
+}
+
+impl<'s, N> Add<&'s str> for ElClass<N>
+where
+    N: Class,
+{
+    type Output = DuoClass<Self, &'s str>;
+
+    fn add(self, other: &'s str) -> Self::Output {
+        DuoClass::new(self, other)
+    }
+}
+
+impl<N, O> Add<Option<O>> for ElClass<N>
+where
+    N: Class,
+    O: Class,
+{
+    type Output = DuoClass<Self, OptionClass<O>>;
+
+    fn add(self, other: Option<O>) -> Self::Output {
+        DuoClass::new(self, OptionClass::new(other))
     }
 }
 
@@ -58,11 +95,11 @@ impl<'a, N: fmt::Display> From<ElClass<N>> for String {
 
 #[cfg(test)]
 mod maybe_attr {
-    use crate::Class;
+    use crate::*;
 
     #[test]
     fn is_should_set_attr_if_is_set() {
-        let el = Class::new("mr-component").el("child");
+        let el = classname("mr-component").el("child");
         assert_eq!(
             "mr-component__child mr-component__child--red",
             el.maybe_attr("red", true).to_string()
@@ -71,7 +108,7 @@ mod maybe_attr {
 
     #[test]
     fn is_should_not_set_attr_if_is_set_is_false() {
-        let el = Class::new("mr-component").el("child");
+        let el = classname("mr-component").el("child");
         assert_eq!(
             "mr-component__child",
             el.maybe_attr("red", false).to_string()
@@ -80,7 +117,7 @@ mod maybe_attr {
 
     #[test]
     fn is_should_still_set_more_attr_after_false_maybe_attr() {
-        let el = Class::new("mr-component").el("child");
+        let el = classname("mr-component").el("child");
         assert_eq!(
             "mr-component__child mr-component__child--blue",
             el.maybe_attr("red", false).attr("blue").to_string()
