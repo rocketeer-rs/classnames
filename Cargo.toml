@@ -2,7 +2,7 @@
 name = "classnames"
 description = "Library for generating BEM style classnames"
 keywords = ["css", "bem", "classes", "classname", "classnames"]
-version = "2.1.0"
+version = "2.1.1"
 authors = ["josephlenton@gmail.com <josephlenton@gmail.com>"]
 edition = "2018"
 license = "MIT"

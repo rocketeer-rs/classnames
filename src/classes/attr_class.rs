@@ -18,7 +18,7 @@ pub struct AttrClass<N> {
 
 impl<N> Class for AttrClass<N> where N: fmt::Display + Sized + PartialEq + Clone {}
 
-impl<N: fmt::Display + Sized> AttrClass<N> {
+impl<N: fmt::Display + Sized + Copy> AttrClass<N> {
     pub(crate) fn new(parent: N) -> Self {
         Self {
             parent,
@@ -26,18 +26,13 @@ impl<N: fmt::Display + Sized> AttrClass<N> {
         }
     }
 
-    pub fn el<'a>(self, class: &'a str) -> ElClass<N, &'a str> {
+    pub fn el<'a>(&self, class: &'a str) -> ElClass<N, &'a str> {
         ElClass::new(self.parent, class)
     }
 
-    pub fn attr(self, attr: &'static str) -> Self {
-        let mut attrs = self.attrs;
-        attrs.push(attr);
-
-        AttrClass {
-            parent: self.parent,
-            attrs: attrs,
-        }
+    pub fn attr(mut self, attr: &'static str) -> Self {
+        self.attrs.push(attr);
+        self
     }
 
     pub fn maybe_attr(self, attr: &'static str, is_set: bool) -> Self {

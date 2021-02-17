@@ -13,7 +13,7 @@ pub struct ElClass<N, C: fmt::Display + Clone = &'static str> {
 
 impl<N> Class for ElClass<N> where N: fmt::Display + Sized + PartialEq + Clone {}
 
-impl<N: Sized + fmt::Display> ElClass<N> {
+impl<N: Sized + fmt::Display + Copy> ElClass<N> {
     pub(crate) fn new<'a>(parent: N, class: &'a str) -> ElClass<N, &'a str> {
         ElClass { parent, class }
     }
