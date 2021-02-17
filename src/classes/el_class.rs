@@ -1,5 +1,5 @@
+use crate::classes::{AttrClass, DuoClass, OptionClass};
 use crate::Class;
-use crate::classes::{OptionClass, AttrClass, DuoClass};
 use ::std::borrow::Cow;
 use ::std::convert::From;
 use ::std::fmt;
@@ -11,17 +11,11 @@ pub struct ElClass<N> {
     class: &'static str,
 }
 
-impl<N> Class for ElClass<N>
-where
-    N: fmt::Display + Sized + PartialEq + Clone
-{}
+impl<N> Class for ElClass<N> where N: fmt::Display + Sized + PartialEq + Clone {}
 
 impl<N: Sized + fmt::Display> ElClass<N> {
     pub(crate) fn new(parent: N, class: &'static str) -> Self {
-        Self {
-            parent,
-            class,
-        }
+        Self { parent, class }
     }
 
     pub fn el(self, class: &'static str) -> ElClass<Self> {

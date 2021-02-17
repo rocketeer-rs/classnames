@@ -1,6 +1,6 @@
-use crate::Class;
 use crate::classes::DuoClass;
 use crate::classes::OptionClass;
+use crate::Class;
 use ::smallvec::SmallVec;
 use ::std::borrow::Cow;
 use ::std::convert::From;
@@ -15,10 +15,7 @@ pub struct AttrClass<N> {
     attrs: SmallVec<[&'static str; ATTR_SMALL_VEC_SIZE]>,
 }
 
-impl<N> Class for AttrClass<N>
-where
-    N: fmt::Display + Sized + PartialEq + Clone
-{}
+impl<N> Class for AttrClass<N> where N: fmt::Display + Sized + PartialEq + Clone {}
 
 impl<N: fmt::Display + Sized> AttrClass<N> {
     pub(crate) fn new(parent: N) -> Self {

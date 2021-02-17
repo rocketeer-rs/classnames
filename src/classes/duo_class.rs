@@ -1,5 +1,5 @@
-use crate::Class;
 use crate::classes::OptionClass;
+use crate::Class;
 use ::std::borrow::Cow;
 use ::std::convert::From;
 use ::std::fmt;
@@ -15,21 +15,16 @@ impl<L, R> Class for DuoClass<L, R>
 where
     L: fmt::Display + Sized + PartialEq + Clone,
     R: fmt::Display + Sized + PartialEq + Clone,
-{}
+{
+}
 
 impl<L, R> DuoClass<L, R>
 where
     L: fmt::Display + Sized,
     R: fmt::Display + Sized,
- {
-    pub(crate) fn new(
-        left: L,
-        right: R,
-    ) -> Self {
-        Self {
-            left,
-            right,
-        }
+{
+    pub(crate) fn new(left: L, right: R) -> Self {
+        Self { left, right }
     }
 }
 

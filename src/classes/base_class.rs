@@ -1,5 +1,5 @@
+use crate::classes::{AttrClass, DuoClass, ElClass, OptionClass};
 use crate::Class;
-use crate::classes::{AttrClass, ElClass, DuoClass, OptionClass};
 use ::std::borrow::Cow;
 use ::std::convert::From;
 use ::std::fmt;

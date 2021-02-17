@@ -1,5 +1,5 @@
-use crate::Class;
 use crate::classes::DuoClass;
+use crate::Class;
 use ::std::borrow::Cow;
 use ::std::convert::From;
 use ::std::fmt;
@@ -10,21 +10,14 @@ pub struct OptionClass<C> {
     option: Option<C>,
 }
 
-impl<C> Class for OptionClass<C>
-where
-    C: fmt::Display + Sized + PartialEq + Clone,
-{}
+impl<C> Class for OptionClass<C> where C: fmt::Display + Sized + PartialEq + Clone {}
 
 impl<C> OptionClass<C>
 where
     C: fmt::Display + Sized,
- {
-    pub(crate) fn new(
-        option: Option<C>,
-    ) -> Self {
-        Self {
-            option,
-        }
+{
+    pub(crate) fn new(option: Option<C>) -> Self {
+        Self { option }
     }
 }
 
