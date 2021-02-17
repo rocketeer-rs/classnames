@@ -6,16 +6,16 @@ use ::std::fmt;
 use ::std::ops::Add;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
-pub struct ElClass<N> {
+pub struct ElClass<N, C: fmt::Display + Clone = &'static str> {
     parent: N,
-    class: &'static str,
+    class: C,
 }
 
 impl<N> Class for ElClass<N> where N: fmt::Display + Sized + PartialEq + Clone {}
 
 impl<N: Sized + fmt::Display> ElClass<N> {
-    pub(crate) fn new(parent: N, class: &'static str) -> Self {
-        Self { parent, class }
+    pub(crate) fn new<'a>(parent: N, class: &'a str) -> ElClass<N, &'a str> {
+        ElClass { parent, class }
     }
 
     pub fn el(self, class: &'static str) -> ElClass<Self> {

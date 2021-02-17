@@ -1,4 +1,5 @@
 use crate::classes::DuoClass;
+use crate::classes::ElClass;
 use crate::classes::OptionClass;
 use crate::Class;
 use ::smallvec::SmallVec;
@@ -23,6 +24,10 @@ impl<N: fmt::Display + Sized> AttrClass<N> {
             parent,
             attrs: SmallVec::new(),
         }
+    }
+
+    pub fn el<'a>(self, class: &'a str) -> ElClass<N, &'a str> {
+        ElClass::new(self.parent, class)
     }
 
     pub fn attr(self, attr: &'static str) -> Self {
@@ -105,32 +110,45 @@ impl<'a, N: fmt::Display> From<AttrClass<N>> for String {
 
 #[cfg(test)]
 mod maybe_attr {
-    use crate::*;
+    use super::*;
+    use crate::classes::*;
 
     #[test]
-    fn is_should_set_attr_if_is_set() {
-        let attr = classname("mr-component").attr("large");
+    fn it_should_set_attr_if_is_set() {
+        let attr = AttrClass::new(BaseClass::new("mr-component")).attr("large");
         assert_eq!(
+            attr.maybe_attr("red", true).to_string(),
             "mr-component mr-component--large mr-component--red",
-            attr.maybe_attr("red", true).to_string()
         )
     }
 
     #[test]
-    fn is_should_not_set_attr_if_is_set_is_false() {
-        let attr = classname("mr-component").attr("large");
+    fn it_should_not_set_attr_if_is_set_is_false() {
+        let attr = AttrClass::new(BaseClass::new("mr-component")).attr("large");
         assert_eq!(
+            attr.maybe_attr("red", false).to_string(),
             "mr-component mr-component--large",
-            attr.maybe_attr("red", false).to_string()
         )
     }
 
     #[test]
-    fn is_should_still_set_more_attr_after_false_maybe_attr() {
-        let attr = classname("mr-component").attr("large");
+    fn it_should_still_set_more_attr_after_false_maybe_attr() {
+        let attr = AttrClass::new(BaseClass::new("mr-component")).attr("large");
         assert_eq!(
+            attr.maybe_attr("red", false).attr("blue").to_string(),
             "mr-component mr-component--large mr-component--blue",
-            attr.maybe_attr("red", false).attr("blue").to_string()
         )
+    }
+}
+
+#[cfg(test)]
+mod el {
+    use super::*;
+    use crate::classes::*;
+
+    #[test]
+    fn it_should_use_parent_element_when_creating_child_classes() {
+        let class = AttrClass::new(BaseClass::new("mr-component")).attr("bold");
+        assert_eq!(class.el("child").to_string(), "mr-component__child");
     }
 }

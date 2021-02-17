@@ -21,7 +21,7 @@ impl BaseClass {
         self.class
     }
 
-    pub fn el(self, class: &'static str) -> ElClass<Self> {
+    pub fn el<'a>(self, class: &'a str) -> ElClass<Self, &'a str> {
         ElClass::new(self, class)
     }
 

@@ -120,7 +120,7 @@ pub use crate::class::classname;
 pub use crate::class::Class;
 
 #[cfg(test)]
-mod tests {
+mod integration {
     use super::*;
 
     #[test]
