@@ -36,7 +36,7 @@
 //! Here is the above again in code ...
 //!
 //! ```
-//! use ::classnames::Class;
+//! use ::classnames::classname;
 //!
 //! fn example() {
 //!   // 1. ".banner"
@@ -70,24 +70,25 @@
 //! For example ...
 //!
 //! ```
-//!   use ::classnames::Class;
-//!   use ::classnames::classname;
+//! use ::classnames::Class;
+//! use ::classnames::classname;
+//! use ::render::{component, rsx, Render};
 //!
-//!   #[component]
-//!   pub fn Card<C: Class, Children: Render>(
-//!     class: Option<C>,
-//!     children: Children,
-//!   ) -> impl Render {
-//!     let base_class = classname("card");
+//! #[component]
+//! pub fn Card<C: Class, Children: Render>(
+//!   class: Option<C>,
+//!   children: Children,
+//! ) -> impl Render {
+//!   let base_class = classname("card");
 //!
-//!     rsx! {
-//!       <div
-//!         class={base_class + class}
-//!       >
-//!         {children}
-//!       </div>
-//!     }
+//!   rsx! {
+//!     <div
+//!       class={base_class + class}
+//!     >
+//!       {children}
+//!     </div>
 //!   }
+//! }
 //! ```
 //!
 
