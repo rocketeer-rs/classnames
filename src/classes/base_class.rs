@@ -76,7 +76,7 @@ impl<'a> From<BaseClass> for Cow<'a, str> {
     }
 }
 
-impl<'a> From<BaseClass> for &'static str {
+impl<'a> From<BaseClass> for &'a str {
     fn from(class: BaseClass) -> Self {
         class.class()
     }
