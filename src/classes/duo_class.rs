@@ -11,6 +11,13 @@ pub struct DuoClass<L, R> {
     right: R,
 }
 
+impl<L, R> Copy for DuoClass<L, R>
+where
+    L: Copy,
+    R: Copy,
+{
+}
+
 impl<L, R> Class for DuoClass<L, R>
 where
     L: fmt::Display + Sized + PartialEq + Clone,
