@@ -1,10 +1,10 @@
 # Classnames
 [![Current Crates.io Version](https://img.shields.io/crates/v/classnames.svg)](https://crates.io/crates/classnames)
 
-An opinionated lLibrary for generating BEM style classnames, in Rust.
+An library for generating BEM style classnames, in Rust.
 
-If you don't know BEM, [BEM](http://getbem.com/naming/) it is a set
-of naming conventions for CSS names.
+If you don't know BEM, it is a set of naming conventions for CSS names.
+You can find a guide on it's naming conventions [here](http://getbem.com/naming/).
 
 ## Using Classnames
 
