@@ -2,11 +2,11 @@
 name = "classnames"
 description = "Library for generating BEM style classnames"
 keywords = ["css", "bem", "classes", "classname", "classnames"]
-version = "2.1.5"
+version = "2.1.6"
 authors = ["josephlenton@gmail.com <josephlenton@gmail.com>"]
 edition = "2018"
 license = "MIT"
-repository = "https://github.com/JosephLenton/classnames"
+repository = "https://github.com/rocketeer-rs/classnames"
 
 [dependencies]
 smallvec = "1.6.1"
